@@ -1,39 +1,39 @@
-# Node DB 2 Module Challenge
+# I am including this README with every future project that involves databases for a reason. This stuff is HARD.
 
-In this challenge, you will write an API that can be used to manage _Cars_ stored in a Relational Database.
 
-## Project Set Up
 
-Follow these steps for starting your project.
+### Finding data in a database - Only users with postal code 1010:
 
-- [ ] Fork this repository into your account and **clone your version**.
-- [ ] Add your _Team Lead_ as collaborator on your repository.
-- [ ] Create a new branch: git checkout -b `<firstName-lastName>`.
-- [ ] Implement the project on your newly created `<firstName-lastName>` branch, committing changes regularly.
-- [ ] Push commits: git push origin `<firstName-lastName>`.
+select * from customers where postalCode = "1010";
 
-Follow these steps for completing your project.
+### Find the first 10 orders placed, sorted descending by the order date. The order with date 1997-02-12 should be at the top.
 
-- [ ] Submit a Pull-Request to merge `<firstName-lastName>` Branch into master (student's Repository). **Please don't merge your own pull request**
-- [ ] Add your _Team Lead_ as a reviewer on the pull-request
-- [ ] Your _Team Lead_ will count the project as complete by merging the branch back into master.
+select * from orders
 
-## Minimum Viable Product
+order by orderDate desc
 
-- Using `knex migrations`, design and write a schema for the `cars` table using the specifications below.
-- Configure `knex` to connect to a `/data/car-dealer.db3` database using the `sqlite3` npm module.
-- Write endpoints to support `CREATE` and `READ` operations on the `cars` resource.
-- Use a rest client like _Insomnia_ or _Postman_ to test your API.
+limit 10
 
-## Specifications
+## General flow
 
-The client for this API is a car dealer who has provided the following specs:
+- [ client ] < HTTP > [ API + Knex Database Driver ] < Database Network Protocol > [ Database ]
 
-- The critical information for each car is the VIN, make, model, and mileage.
-- They also track transmission type and status of the title (clean, salvage, etc.), but this information is not always immediately known.
+- Knex translates from JS to SQL and vice versa. Basically a database transcriber.
 
-## Stretch Problems
+- Database Drivers on the other hand, know how to use the database network protocols. HTTP://, postgresql://...
 
-- Add seed data to the database using `knex seeds`
-- Add `UPDATE` and `DELETE` operations to your API.
-- Write a schema file for a `sales` table. This table should track information on the sale of each car. You may wish to research `foreign keys` in order to link each sale to the entry in `cars` which sold.
+### Finding data in THIS database.
+
+#### We have three columns: 
+- `id`, which is exactly what it says on the label.
+- `name`, which is a string that MUST be unique.
+- `budget`, which is a float.
+
+#### Things we need to do: 
+##### GET request to /api/cars:
+- Send back all the data in the `cars` table.
+`select * from accounts` or `database.select("*").from("cars")`
+
+##### POST request to /api/cars: 
+- Simply stick the request body into the `cars` table.
+`database("cars").insert({...request.body})`
